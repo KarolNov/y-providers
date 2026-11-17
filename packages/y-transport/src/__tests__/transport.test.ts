@@ -164,7 +164,7 @@ describe('server storage', () => {
 
   // Fails `instanceof Uint8Array`, as bytes read under Jest's sandbox do.
   it('loads updates made in another realm', async () => {
-    const merged = mergeUpdatesV2(storedUpdates() as Uint8Array<ArrayBuffer>[])
+    const merged = mergeUpdatesV2(storedUpdates())
     const bytes: Uint8Array = runInNewContext('new Uint8Array(length)', { length: merged.length })
     bytes.set(merged)
     const s = await server({

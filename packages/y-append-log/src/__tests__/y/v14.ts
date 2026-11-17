@@ -15,7 +15,9 @@ export const update = (key: string, value: string) => Y.encodeStateAsUpdateV2(do
 export const v1Update = (key: string, value: string) => Y.encodeStateAsUpdate(docWith(key, value))
 /** The v2 state of an empty document. */
 export const emptyUpdate = () => Y.encodeStateAsUpdateV2(new Y.Doc())
-export const mergeUpdatesV2 = Y.mergeUpdatesV2
+/** v14 types its input as `Uint8Array<ArrayBuffer>`; the bytes are the same. */
+export const mergeUpdatesV2 = (updates: Uint8Array[]) =>
+  Y.mergeUpdatesV2(updates as Uint8Array<ArrayBuffer>[])
 
 /** The map entries of what `load` resolved, applied in one transaction. */
 export const entries = (updates: Uint8Array[] | null) => {

@@ -5,7 +5,7 @@ export const major = 13
 export const Doc = Y.Doc
 export type Doc = Y.Doc
 export const applyUpdateV2 = Y.applyUpdateV2
-export const mergeUpdatesV2 = Y.mergeUpdatesV2
+export const mergeUpdatesV2 = (updates: Uint8Array[]) => Y.mergeUpdatesV2(updates)
 
 /** Shared text `n`: `insert`, `toString`, `length`. */
 export const text = (d: Y.Doc, n: string) => d.getText(n)
