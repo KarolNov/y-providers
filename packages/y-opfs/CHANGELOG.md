@@ -1,8 +1,10 @@
 # Changelog
 
-## Unreleased
+## 0.1.0
 
-- **Breaking:** `openStorage` is async and takes `order: ('opfs' | 'indexeddb' | 'memory')[]` in place of `mode`, default `['opfs', 'indexeddb']`. It opens each candidate once, checking it with one cheap call, and the first that works serves the whole session. It resolves `{ storage, active, skipped }`, with `active` naming that backend and `skipped` listing the candidates that failed before it, with their errors. A candidate that does not answer the check within 10 seconds counts as failed. A one-element `order` pins a backend and rejects with its error; when every candidate fails it rejects with an `AggregateError`. `'memory'` is used only when listed. Replace `openStorage({ mode: 'indexeddb' })` with `await openStorage({ order: ['indexeddb'] })`, `mode: 'opfs'` with `order: ['opfs']`, and `'auto'` with the default. See [#92](https://github.com/KarolNov/y-modern/issues/92).
-- **Breaking:** `FallbackStorage` and the `StorageMode` type are removed. Switching backends on the first failed operation is replaced by the check at open, so a session never switches backends midway. The choice is made per session, though: a tab whose OPFS check fails uses IndexedDB, and does not see the OPFS data that other tabs or later sessions use.
-- `WorkerStorage` rejects pending and later calls when its worker fails to load, instead of leaving them unanswered. An error after the worker has answered once is left to the console. It listens with `addEventListener`, so an `onerror` set by `createWorker` is kept.
-- `OpfsStorage` no longer keeps a failed `getDirectory()`; the next call tries again.
+First release, extracted from y-modern.
+
+- `OpfsPersistence`: a Yjs document kept in an append-only log on OPFS (from a worker), IndexedDB or memory, with crash-safe compaction, Web Locks between tabs, live sync between tabs over `BroadcastChannel`, and events.
+- `openStorage` tries OPFS, then IndexedDB, and reports what it skipped. `y-opfs/node` has `NodeFsStorage`; `y-opfs/worker` is the OPFS worker.
+- Yjs v13 from `y-opfs`, Yjs v14 (`@y/y`) from `y-opfs/y14`.
+- Experimental.

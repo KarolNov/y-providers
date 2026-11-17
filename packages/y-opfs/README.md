@@ -1,8 +1,19 @@
 # y-opfs
 
-Part of [y-modern](../../README.md). [Yjs](https://yjs.dev) persistence (v0.1): append-only update log on the Origin Private File System, written from a Worker via sync access handles. Crash-safe compaction, IndexedDB fallback, Node/Bun filesystem adapter.
+Part of [y-providers](../../README.md). [Yjs](https://yjs.dev) persistence (v0.1): append-only update log on the Origin Private File System, written from a Worker via sync access handles. Crash-safe compaction, IndexedDB fallback, Node/Bun filesystem adapter.
 
 > **Status: experimental.** The OPFS backend is built to explore newer browser storage APIs (sync access handles, Web Locks) and a crash-safe log format. It is not a drop-in replacement for [`y-indexeddb`](https://github.com/yjs/y-indexeddb), and for many apps `y-indexeddb`, or this package's IndexedDB mode, is probably the better choice. See [Which backend should I use?](#which-backend-should-i-use).
+
+## Yjs v13 and v14
+
+The main entry is for Yjs v13 (`yjs`). For Yjs v14 (`@y/y`, currently a release candidate) import the `/y14` entry instead; the API is the same.
+
+```ts
+import { ... } from 'y-opfs' // yjs ^13.6
+import { ... } from 'y-opfs/y14' // @y/y >=14.0.0-rc.30
+```
+
+Each entry loads only its own Yjs, so an app never bundles both. Install the one you use: Yjs is an optional peer dependency. The `/y14` entry needs Node 22 or later, like `@y/y`. The `./node` and `./worker` entries hold no Yjs and serve both majors.
 
 ## Persistence
 
@@ -47,7 +58,7 @@ Reasons to still consider this package:
 
 ### Durability and storage limits
 
-What happens to stored documents when storage runs out, when the browser evicts a site's data, and when the browser is killed. Measured 2026-10-04 with Playwright 1.63 on macOS (Apple M1): Chromium 153, Firefox 155 and WebKit 26.6. The WebKit build is Playwright's, not Safari. Raw results are in [`durability/results/latest.json`](durability/results/latest.json); `pnpm durability` reruns them in a few minutes.
+What happens to stored documents when storage runs out, when the browser evicts a site's data, and when the browser is killed. Measured 2026-10-04 with Playwright 1.63 on macOS (Apple M1): Chromium 153, Firefox 155 and WebKit 26.6. The WebKit build is Playwright's, not Safari. Measured in the y-modern repository, whose durability harness is not part of y-providers; the code measured is the code in this package, with Yjs v13.
 
 **In an app:**
 
@@ -118,9 +129,9 @@ new OpfsPersistence('my-doc', doc, storage, { broadcast: false }) // off; tabs m
 new OpfsPersistence('my-doc', doc, storage, { broadcast: (name) => new BroadcastChannel(name) }) // your own channel
 ```
 
-**Clearing data.** `persistence.clearData()` deletes the stored files and detaches. Other tabs on the same channel are told: they detach too and emit `cleared` with `remote: true`. Their doc still holds content that is no longer in storage, so discard it and open a fresh one (the demo does). A tab that does not get the message (broadcast off, or frozen) keeps the old behaviour and writes its own state back on its next write, and writes that are in flight in another tab when you clear can survive.
+**Clearing data.** `persistence.clearData()` deletes the stored files and detaches. Other tabs on the same channel are told: they detach too and emit `cleared` with `remote: true`. Their doc still holds content that is no longer in storage, so discard it and open a fresh one. A tab that does not get the message (broadcast off, or frozen) keeps the old behaviour and writes its own state back on its next write, and writes that are in flight in another tab when you clear can survive.
 
-**Watching what it does.** `onEvent` reports what the persistence is doing, each event with the log position afterwards (`{ slot, generation, records, bytes }`). It is for debugging and status displays; the demo's panel is built on it.
+**Watching what it does.** `onEvent` reports what the persistence is doing, each event with the log position afterwards (`{ slot, generation, records, bytes }`). It is for debugging and status displays.
 
 ```ts
 new OpfsPersistence('my-doc', doc, storage, { onEvent: (e) => console.log(e.type, e.position) })
@@ -132,6 +143,8 @@ new OpfsPersistence('my-doc', doc, storage, { onEvent: (e) => console.log(e.type
 In Node the global `BroadcastChannel` connects workers and the main thread of one process only (it is `unref`'d, so it does not keep the process alive); separate processes sharing a `NodeFsStorage` directory still merge on their next write.
 
 ## Benchmarks
+
+Earlier measurements, made in the y-modern repository where the benchmark harness lives (it is not part of y-providers). The code measured is the code in this package; only package names and the Yjs adapter changed since. They were taken with Yjs v13.
 
 Compared against [`y-indexeddb`](https://github.com/yjs/y-indexeddb) in headless Chromium: `y-indexeddb`, `OpfsPersistence` over OPFS (via the worker), and `OpfsPersistence` over its IndexedDB fallback. Every backend receives the same deterministic updates, each timed run uses a fresh database, and timing stops only after the data is committed. Defaults are used everywhere; nothing is tuned.
 
@@ -190,7 +203,7 @@ Time to fold the stored updates into one snapshot.
 
 **Reading the results**
 
-- `y-indexeddb` still wins the cases where every update must be stored before the next one: about 3x faster than OPFS and about 1.6x faster than our IndexedDB fallback. Until [#14](https://github.com/KarolNov/y-modern/issues/14) each write made two storage calls, a size check to see whether another tab had written and then the append. Both now happen in one call (`Storage.appendIfSize`), which took these rows from about 870 ms to 540 ms on OPFS and from about 400 ms to 290 ms on the fallback, measured on the same machine. What remains on OPFS is mostly the cost of opening and closing a file handle and an access handle on every write, which other tabs need us to release. Keeping file handles between writes was tried and dropped: in Chromium a kept handle to a file another tab has removed still opens and reports a nonsense size. `flush()` costs almost nothing in this headless run, so durability is not what the gap is made of. Our writes also take a Web Lock, which `y-indexeddb` does not.
+- `y-indexeddb` still wins the cases where every update must be stored before the next one: about 3x faster than OPFS and about 1.6x faster than our IndexedDB fallback. Earlier, each write made two storage calls, a size check to see whether another tab had written and then the append. Both now happen in one call (`Storage.appendIfSize`), which took these rows from about 870 ms to 540 ms on OPFS and from about 400 ms to 290 ms on the fallback, measured on the same machine. What remains on OPFS is mostly the cost of opening and closing a file handle and an access handle on every write, which other tabs need us to release. Keeping file handles between writes was tried and dropped: in Chromium a kept handle to a file another tab has removed still opens and reports a nonsense size. `flush()` costs almost nothing in this headless run, so durability is not what the gap is made of. Our writes also take a Web Lock, which `y-indexeddb` does not.
 - `OpfsPersistence` wins updates applied back to back (about 2.5x faster), because it coalesces everything queued into one record. It also compacts faster.
 - For single large updates the result is mixed: we are faster at 1.1 MB and `y-indexeddb` at 8.9 MB. Loads are mixed too: we are faster at 1 MB and 4 MB, `y-indexeddb` is faster for the document with 20k edits of history, and OPFS loses on small documents when the worker has to start first (5.1 ms against 2.2 ms at 10 KB).
 - We store less in every size case: our records hold Yjs v2 updates, which are more compact than the v1 updates `y-indexeddb` stores. IndexedDB compresses on disk and OPFS files are not compressed, so the bracketed estimates differ from the payload. Treat the estimates as indicative, as they come from one coarse reading.
@@ -198,27 +211,17 @@ Time to fold the stored updates into one snapshot.
 
 **Method and limits**
 
-- Medians over 5 to 11 timed runs after 1 to 2 warmups; backend order rotates every round. Raw samples, quartiles and extra measurements are in [`bench/results/latest.json`](bench/results/latest.json).
+- Medians over 5 to 11 timed runs after 1 to 2 warmups; backend order rotates every round.
 - Edits are applied in 100-edit batches when building load and size documents, so our log holds batches while `y-indexeddb` stores each edit. "Awaited until stored" uses a barrier transaction for `y-indexeddb`, which has no flush API.
 - One machine, one browser, headless, warm OS file cache. Loads reopen the same database in the same page, so they do not show a cold start from disk. Safari and Firefox are not measured.
 - The suite runs the TypeScript sources through a production Vite build, not the published `dist`.
 
-Run it yourself (Chromium installed as for the tests):
-
-```
-pnpm bench                  # full run, about 6 minutes; rewrites bench/results/latest.{json,md}
-pnpm bench --quick          # smoke test, writes bench/results/quick.* (ignored by git)
-pnpm bench --only load/1MB  # only cases whose id contains the text
-node bench/report.mjs       # re-render latest.md from latest.json
-```
-
 ## Testing
 
 ```
-pnpm test           # node + real Chromium, Firefox and WebKit (Vitest browser mode); includes multi-tab live sync
+pnpm test           # every suite once per Yjs major: node + real Chromium, Firefox and WebKit (Vitest browser mode); includes multi-tab live sync
 pnpm test:node
 pnpm test:browser   # first time: pnpm exec playwright install chromium firefox webkit
-pnpm durability     # quota, eviction and killed-browser runs in Chromium, Firefox and WebKit (a few minutes)
 ```
 
-WebKit runs the browser suite with a profile on disk, because in Playwright's default context (like a Safari private window) OPFS fails; the `private-browsing` project runs `*.private-browsing.test.ts` in that default context to check the IndexedDB fallback. `pnpm exec vitest run --project 'browser (webkit)'` runs one browser.
+WebKit runs the browser suite with a profile on disk, because in Playwright's default context (like a Safari private window) OPFS fails; the `private-browsing` project runs `*.private-browsing.test.ts` in that default context to check the IndexedDB fallback. Every project exists once per Yjs major (`node-v13`, `node-v14`, `browser-v13`, …); `pnpm exec vitest run --project 'browser-v14 (webkit)'` runs one browser on one major.

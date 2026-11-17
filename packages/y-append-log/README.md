@@ -1,6 +1,19 @@
 # y-append-log
 
-The per-document storage contract for Yjs updates, an in-memory store, and a conformance helper for backend authors. It depends on `yjs` only, not on persistence or transport.
+Part of [y-providers](../../README.md). The per-document storage contract for Yjs updates, an append-only byte-file log with crash-safe compaction, an in-memory store, and a conformance helper for backend authors. [`y-opfs`](../y-opfs) and [`y-transport`](../y-transport) build on it.
+
+## Yjs v13 and v14
+
+The main entry is for Yjs v13 (`yjs`). For Yjs v14 (`@y/y`, currently a release candidate) import the `/y14` entry instead; the API is the same.
+
+```ts
+import { ... } from 'y-append-log' // yjs ^13.6
+import { ... } from 'y-append-log/y14' // @y/y >=14.0.0-rc.30
+```
+
+Each entry loads only its own Yjs, so an app never bundles both. Install the one you use: Yjs is an optional peer dependency. The `/y14` entry needs Node 22 or later, like `@y/y`.
+
+`y-append-log/core` exports the same classes without any Yjs: they take the Yjs functions as a `yjs` option. It is for other providers that bring their own adapter; apps use `y-append-log` or `y-append-log/y14`.
 
 ## The contract
 
@@ -24,8 +37,6 @@ interface DocumentStore {
     })
   }
   ```
-
-  Why an array and not one merge: [#103](https://github.com/KarolNov/y-modern/issues/103).
 
 - `append` adds one update.
 - `delete` removes the document and nothing else. Every backend has it.
@@ -52,7 +63,7 @@ It keeps each document merged, so `load` resolves a one-element array. Stores bu
 
 ## Byte-file adapter
 
-`ByteFileStore` implements `DocumentStore` over a byte-file `Storage` (`read`, `size`, `append`, `write`, `remove`, optional `appendIfSize` and `close`), the shape of OPFS, Node fs, IndexedDB and memory. `appendIfSize` appends only when the file is still the length the writer left it, in one operation; without it each append costs a separate `size()` first. This package ships `MemoryStorage`; [`@y-modern/persistence`](../persistence) ships the OPFS, IndexedDB and Node fs ones.
+`ByteFileStore` implements `DocumentStore` over a byte-file `Storage` (`read`, `size`, `append`, `write`, `remove`, optional `appendIfSize` and `close`), the shape of OPFS, Node fs, IndexedDB and memory. `appendIfSize` appends only when the file is still the length the writer left it, in one operation; without it each append costs a separate `size()` first. This package ships `MemoryStorage`; [`y-opfs`](../y-opfs) ships the OPFS, IndexedDB and Node fs ones.
 
 ```ts
 import { ByteFileStore, MemoryStorage } from 'y-append-log'
