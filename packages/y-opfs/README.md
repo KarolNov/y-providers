@@ -11,8 +11,7 @@ import * as Y from 'yjs'
 import { OpfsPersistence, openStorage } from 'y-opfs'
 
 const { storage, active } = await openStorage({
-  createWorker: () =>
-    new Worker(new URL('y-opfs/worker', import.meta.url), { type: 'module' }),
+  createWorker: () => new Worker(new URL('y-opfs/worker', import.meta.url), { type: 'module' }),
 })
 const doc = new Y.Doc()
 const persistence = new OpfsPersistence('my-doc', doc, storage)

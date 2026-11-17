@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "customConditions": ["node"],
+    "paths": {
+      "#entry": ["./src/index.ts"],
+      "#server": ["./src/server/index.ts"],
+      "#y": ["./src/__tests__/y/v13.ts"],
+      "#log": ["../y-append-log/src/index.ts"]
+    }
+  },
+  "include": ["src"]
+}

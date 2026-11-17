@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "paths": {
+      "#entry": ["./src/y14.ts"],
+      "#server": ["./src/server/y14.ts"],
+      "#y": ["./src/__tests__/y/v14.ts"],
+      "#log": ["../y-append-log/src/y14.ts"]
+    }
+  }
+}
