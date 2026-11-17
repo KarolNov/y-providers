@@ -1,0 +1,71 @@
+{
+  "docs": {
+    "backend": "notion",
+    "location": {
+      "root": "https://app.notion.com/p/41b43cce21f281988e36fc30f37e2bc3",
+      "specs": "collection://41b43cce-21f2-8103-ad4e-000b7481002e",
+      "blueprints": "collection://41b43cce-21f2-8158-81c8-000b0fba6e06"
+    }
+  },
+  "tickets": {
+    "tracker": "notion",
+    "location": {
+      "tasks": "collection://41b43cce-21f2-81cf-a34d-000b155ad557"
+    }
+  },
+  "project": "https://app.notion.com/p/41143cce21f28027bc46de18a8c321de",
+  "specs": {
+    "compat/yjs": {
+      "ref": null,
+      "anchors": [
+        "packages/*/src/index.ts",
+        "packages/*/src/y14.ts",
+        "packages/*/src/**/adapter*.ts",
+        "packages/*/package.json"
+      ]
+    },
+    "append-log": {
+      "ref": null,
+      "anchors": ["packages/y-append-log/src", "!**/__tests__/**"]
+    },
+    "opfs/persistence": {
+      "ref": null,
+      "anchors": ["packages/y-opfs/src", "!packages/y-opfs/src/persistence.ts", "!**/__tests__/**"]
+    },
+    "opfs/cross-tab": {
+      "ref": null,
+      "anchors": ["packages/y-opfs/src/persistence.ts"]
+    },
+    "transport/connection": {
+      "ref": null,
+      "anchors": [
+        "packages/y-transport/src/transport.ts",
+        "packages/y-transport/src/link.ts",
+        "packages/y-transport/src/protocol.ts"
+      ]
+    },
+    "transport/sync": {
+      "ref": null,
+      "anchors": ["packages/y-transport/src/sync.ts", "packages/y-transport/src/provider.ts"]
+    },
+    "transport/awareness": {
+      "ref": null,
+      "anchors": ["packages/y-transport/src/provider.ts", "packages/y-transport/src/transport.ts"]
+    },
+    "transport/server": {
+      "ref": null,
+      "anchors": ["packages/y-transport/src/server", "!**/__tests__/**"]
+    }
+  },
+  "changes": {
+    "extract-y-providers": {
+      "brief": "https://app.notion.com/p/41b43cce21f2815a8dc1d31147eb20ce",
+      "review": "https://app.notion.com/p/41b43cce21f281928adee3cedc594210",
+      "tickets": "https://app.notion.com/p/41b43cce21f281928adee3cedc594210",
+      "status": "building",
+      "baseCommit": "34fc9bfff44325c010758f272925e13c0e8ec003",
+      "baseRepo": "KarolNov/y-modern",
+      "branch": "kn/extract-y-providers"
+    }
+  }
+}

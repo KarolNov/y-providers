@@ -1,0 +1,25 @@
+{
+  "name": "y-providers",
+  "private": true,
+  "description": "Yjs providers for v13 and v14: OPFS persistence, WebTransport sync with WebSocket fallback, and the append-only log they share.",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "build": "pnpm -r build",
+    "typecheck": "pnpm -r typecheck",
+    "test": "pnpm -r test",
+    "test:node": "pnpm -r --if-present test:node",
+    "test:browser": "pnpm -r --if-present test:browser",
+    "format": "oxfmt --write",
+    "format:check": "oxfmt --check",
+    "check:entries": "node scripts/check-entries.mjs"
+  },
+  "devDependencies": {
+    "oxfmt": "^0.71.0",
+    "playwright": "^1.63.0"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "packageManager": "pnpm@9.12.3"
+}
