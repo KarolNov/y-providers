@@ -196,7 +196,7 @@ describe.each(['webtransport', 'websocket'] as const)('over %s', (kind) => {
     const b = client({ ...options, minBackoff: 20, maxBackoff: 50 }, name)
     await a.provider.whenSynced
     await b.provider.whenSynced
-    expect(await commands.dropConnections()).toBeGreaterThanOrEqual(2)
+    expect(await commands.dropConnections(name)).toBeGreaterThanOrEqual(2)
     await waitFor(() => a.events.some((e) => e.type === 'disconnected'), 'a to notice')
     text(a.doc, 't').insert(0, 'offline')
     await waitFor(
