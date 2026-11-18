@@ -58,10 +58,7 @@
     },
     "append-log": {
       "ref": "https://app.notion.com/p/41c43cce21f281e583ddd6e746462b24",
-      "anchors": [
-        "packages/y-append-log/src/core",
-        "!packages/y-append-log/src/core/yjs.ts"
-      ],
+      "anchors": ["packages/y-append-log/src/core", "!packages/y-append-log/src/core/yjs.ts"],
       "specVersion": "1d528c346b5ade50",
       "anchorsFiles": {
         "packages/y-append-log/src/core/byte-file-storage.ts": "89293ac09245",
@@ -96,9 +93,7 @@
     },
     "opfs/cross-tab": {
       "ref": "https://app.notion.com/p/41c43cce21f281089fd9e3ff95be7eca",
-      "anchors": [
-        "packages/y-opfs/src/core/persistence.ts"
-      ],
+      "anchors": ["packages/y-opfs/src/core/persistence.ts"],
       "specVersion": "0e6f3b27b5ee1e48",
       "anchorsFiles": {
         "packages/y-opfs/src/core/persistence.ts": "8199668780aa"
