@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Docs: a v13 client and a v14 client do sync through one server, except that nested types a v14 client creates reach v13 as XML types. The 0.1.0 notes said they cannot sync. Tests in `mixed-majors.test.ts` cover both server majors.
+
 ## 0.1.0
 
 First release. The code comes from [y-modern](https://github.com/KarolNov/y-providers#where-this-came-from), my private Yjs playground.

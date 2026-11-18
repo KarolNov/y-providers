@@ -37,7 +37,7 @@ import { ... } from 'y-transport/y14' // @y/y >=14.0.0-rc.30
 
 Each entry loads only its own Yjs, so an app never bundles both. Install the one you use: Yjs is an optional peer dependency. The `/y14` entry needs Node 22 or later, like `@y/y`. The server has the same split: `y-transport/server` for v13 and `y-transport/server/y14` for v14; `./server/ws` and `./server/webtransport` hold no Yjs and serve both. The v13 entries use `y-protocols` for awareness, the v14 ones `@y/protocols`.
 
-A v13 client and a v14 client syncing through one server is **not supported** in 0.1.0: run the server on the same major as its clients. The wire protocol is the same for both.
+A v13 client and a v14 client syncing through one server is **not promised** in 0.1.0. The wire protocol and the update format are the same for both, and a server of either major relays both without loss, through storage too: root text, maps, lists, formatting and awareness sync both ways. Nested types are the catch. v14 has a single node type, and a nested node a v14 client creates is encoded as an XML type, so a v13 client reads a nested map from v14 as a `Y.XmlFragment` (a `Y.XmlElement` if the v14 node has a name) and can't see its keys as a `Y.Map`. Nested types created by a v13 client keep their type in both directions. If your clients mix majors, keep shared state in root types, or create nested types from v13 clients.
 
 ## Client
 
