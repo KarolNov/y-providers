@@ -23,8 +23,8 @@ An entry SHALL load only its own major's Yjs packages and never the other major'
 
 ### Requirement: Mixed majors not promised
 
-Syncing a v13 client with a v14 client SHALL be documented as unsupported.
+Syncing a v13 client with a v14 client SHALL be documented as not promised, naming what is known not to work.
 
 - **Scenario: Reading the docs**
   - **WHEN** a reader looks for v13/v14 interop in the README
-  - **THEN** it says mixed-version sync is not supported in 0.1.0
+  - **THEN** it says mixed-version sync is not promised in 0.1.0, and that nested types a v14 client creates reach v13 clients as XML types

@@ -29,7 +29,7 @@
         "packages/*/package.json",
         "scripts/check-entries.mjs"
       ],
-      "specVersion": "52a76b746c800e17",
+      "specVersion": "7f80055d517e9a13",
       "anchorsFiles": {
         "packages/y-append-log/package.json": "ebf57e84848e",
         "packages/y-append-log/src/adapter13.ts": "662b5ee1f762",
@@ -54,7 +54,7 @@
         "packages/y-transport/src/y14.ts": "d71a398f399a",
         "scripts/check-entries.mjs": "e83c6997a31d"
       },
-      "syncedCommit": "44b9ff4061d6ce93e185b352e4a91a6b58104297"
+      "syncedCommit": "6c65f1774a0778a394a8d5f304841425a715b33a"
     },
     "append-log": {
       "ref": "https://app.notion.com/p/41c43cce21f281e583ddd6e746462b24",
