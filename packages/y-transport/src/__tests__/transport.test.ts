@@ -289,3 +289,20 @@ describe('mode selection', () => {
     expect(() => openTransport({ mode: 'socketio' as never })).toThrow(/Unknown transport mode/)
   })
 })
+
+describe('both adapters on one server', () => {
+  it('syncs a WebSocket client and a WebTransport client through one SyncServer', async () => {
+    const s = await server()
+    const [[, ws], [, wt]] = modes(s)
+    const a = client(ws)
+    const b = client(wt)
+    text(a.doc, 't').insert(0, 'over ws')
+    await a.provider.whenSynced
+    await b.provider.whenSynced
+    await waitFor(() => text(b.doc, 't').toString() === 'over ws', 'b to get the ws edit')
+    text(b.doc, 't').insert(0, 'wt + ')
+    await waitFor(() => text(a.doc, 't').toString() === 'wt + over ws', 'a to get the wt edit')
+    expect(a.transport.kind).toBe('websocket')
+    expect(b.transport.kind).toBe('webtransport')
+  })
+})
