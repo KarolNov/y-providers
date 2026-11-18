@@ -40,7 +40,7 @@ import { SyncServer } from 'y-transport/server/y14'
 
 - Each entry loads only its own major's packages, so an app never bundles both Yjs copies. Yjs is an optional peer dependency: install the one you use.
 - The `/y14` entries need Node 22 or later, like `@y/y`. They are tested against `@y/y` 14.0.0-rc.30, and CI also runs against the newest release candidate.
-- Mixing majors is **not supported** in 0.1.0: a v13 client and a v14 client cannot sync through one server. Run the server on the same major as its clients.
+- Mixing majors is **not promised** in 0.1.0, but mostly works: a v13 client and a v14 client sync root types, formatting and awareness through a server of either major, and the server loses nothing. The catch is nested types made by a v14 client: v14 has one node type and labels nested nodes as XML, so a v13 client that expects a nested `Y.Map` gets a `Y.XmlFragment`. Nested types made by a v13 client keep their type both ways. `packages/y-transport/src/__tests__/mixed-majors.test.ts` records all of this.
 
 ## Example
 
