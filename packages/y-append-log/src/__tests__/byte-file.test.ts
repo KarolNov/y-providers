@@ -208,7 +208,7 @@ describe('ByteFileStore options', () => {
     await store.append('one', withUpdate('a'))
     await store.delete('one')
     expect(await store.load('one')).toBeNull()
-    expect(new Set(locks)).toEqual(new Set(['y-modern:one']))
+    expect(new Set(locks)).toEqual(new Set(['y-append-log:one']))
     await store.close()
     expect(closed).toBe(1)
   })
@@ -244,7 +244,7 @@ describe('locking', () => {
     try {
       const store = new ByteFileStore(new MemoryStorage(), { lock: webLocks })
       await store.append('d', withUpdate('a'))
-      expect(stub.requested).toEqual(['y-modern:d'])
+      expect(stub.requested).toEqual(['y-append-log:d'])
     } finally {
       stub.restore()
     }

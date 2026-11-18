@@ -43,7 +43,7 @@ export interface OpenedStorage {
   skipped: { backend: StorageBackend; error: unknown }[]
 }
 
-const PROBE = '.y-modern-probe'
+const PROBE = '.y-opfs-probe'
 /** How long a candidate may take to answer the probe before it counts as failed. */
 const PROBE_TIMEOUT_MS = 10_000
 

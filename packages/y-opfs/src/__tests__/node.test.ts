@@ -159,7 +159,7 @@ describe('OpfsPersistence', () => {
 
 describe('ByteFileStore over Node fs', () => {
   const make = async () => {
-    const dir = await mkdtemp(join(tmpdir(), 'y-modern-conformance-'))
+    const dir = await mkdtemp(join(tmpdir(), 'y-opfs-conformance-'))
     return {
       // independent handles: each opens the directory on its own
       open: () => new ByteFileStore(new NodeFsStorage(dir), { maxRecords: 7 }),

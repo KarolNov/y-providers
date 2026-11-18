@@ -270,7 +270,7 @@ export class ByteFileLog {
 export type LockFn = <T>(name: string, fn: () => Promise<T>) => Promise<T>
 
 /** The Web Locks name that guards one document's files, across tabs. */
-export const byteFileLockName = (name: string) => `y-modern:${name}`
+export const byteFileLockName = (name: string) => `y-append-log:${name}`
 
 const noLock: LockFn = (_name, fn) => fn()
 
