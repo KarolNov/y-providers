@@ -2,7 +2,7 @@
 
 ## 0.1.0
 
-First release, extracted from y-modern.
+First release. The code comes from [y-modern](https://github.com/KarolNov/y-providers#where-this-came-from), my private Yjs playground.
 
 - The per-document storage contract `DocumentStore` (`load`, `append`, `delete`, optional `close`), with every update in the Yjs v2 encoding.
 - `ByteFileLog` and `ByteFileStore`: an append-only CRC log over a byte-file `Storage`, with crash-safe compaction into two generation slots. `MemoryStorage` and `MemoryDocumentStore` keep everything in memory.

@@ -2,7 +2,7 @@
 
 ## 0.1.0
 
-First release, extracted from y-modern.
+First release. The code comes from [y-modern](https://github.com/KarolNov/y-providers#where-this-came-from), my private Yjs playground.
 
 - `OpfsPersistence`: a Yjs document kept in an append-only log on OPFS (from a worker), IndexedDB or memory, with crash-safe compaction, Web Locks between tabs, live sync between tabs over `BroadcastChannel`, and events.
 - `openStorage` tries OPFS, then IndexedDB, and reports what it skipped. `y-opfs/node` has `NodeFsStorage`; `y-opfs/worker` is the OPFS worker.
