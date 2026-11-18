@@ -9,7 +9,7 @@
     "dev": "node dev.ts",
     "dev:y14": "node dev.ts --y14",
     "server": "node server.ts",
-    "build": "vite build --outDir dist/v13 && vite build --mode y14 --outDir dist/v14",
+    "build:example": "vite build --outDir dist/v13 && vite build --mode y14 --outDir dist/v14",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

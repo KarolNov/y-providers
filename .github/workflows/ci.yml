@@ -63,7 +63,7 @@ jobs:
           node-version: 24
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm -r --filter './packages/*' update @y/y@beta
+      - run: pnpm -r --filter './packages/*' --filter './examples/*' update @y/y@beta
       - run: pnpm build
       - run: pnpm typecheck
       - run: pnpm test:node

@@ -1,7 +1,42 @@
 // The page around the document. Holds no Yjs, so main.ts (v13) and
-// main.y14.ts (v14) share it.
-import type { StorageBackend } from 'y-opfs'
+// main.y14.ts (v14) share it: they hand in their major's calls.
+import type { OpenedStorage, StorageBackend, openStorage } from 'y-opfs'
 import type { Transport, TransportOptions } from 'y-transport'
+import { CONFIG_URL } from '../endpoints.ts'
+
+/** What main.ts and main.y14.ts hand to `start`, each from its own Yjs major. */
+export interface Page {
+  major: number
+  openStorage: typeof openStorage
+  /** Restore the document from `storage` and keep saving it there. */
+  persist(name: string, storage: OpenedStorage['storage']): { whenSynced: Promise<unknown> }
+  /** The shared list in the document. */
+  list(): SharedList
+  /** Connect the document to the server; returns the transport, for the status line. */
+  sync(name: string, options: TransportOptions): Transport
+}
+
+/** Local copy first, then the server copy once the server answers. */
+export async function start(page: Page) {
+  // One name per major: both pages share an origin, so they would share the stored log.
+  const name = `example-v${page.major}`
+  try {
+    // Local copy: OPFS through a worker, or IndexedDB where OPFS is unavailable.
+    const { storage, active } = await page.openStorage({
+      createWorker: () => new Worker(new URL('y-opfs/worker', import.meta.url), { type: 'module' }),
+    })
+    await page.persist(name, storage).whenSynced
+    // The list works from the local copy alone, with or without the server.
+    bindList(page.list())
+
+    // Server copy: WebTransport, or WebSocket where WebTransport is unavailable.
+    setStatus(page.major, active, `waiting for the sync server at ${CONFIG_URL}`)
+    const transport = page.sync(name, await serverOptions(page.major))
+    showStatus(page.major, active, transport)
+  } catch (error) {
+    showError(error)
+  }
+}
 
 /** What the server hands out at GET /config (see server.ts). */
 interface ServerConfig {
@@ -11,14 +46,23 @@ interface ServerConfig {
   certHash: number[]
 }
 
+/** The server's config, asking again every few seconds until the sync server answers. */
+async function fetchConfig(): Promise<ServerConfig> {
+  for (;;) {
+    try {
+      const response = await fetch(CONFIG_URL)
+      // Something else on the port answers with an error or with no JSON: keep waiting for the sync server.
+      if (response.ok) return (await response.json()) as ServerConfig
+    } catch {
+      // not running yet
+    }
+    await new Promise((resolve) => setTimeout(resolve, 2000))
+  }
+}
+
 /** Transport options for the example server: WebTransport with WebSocket fallback, pinning its self-signed certificate. */
-export async function serverOptions(major: number): Promise<TransportOptions> {
-  const config: ServerConfig = await fetch('http://127.0.0.1:1234/config').then(
-    (r) => r.json(),
-    () => {
-      throw new Error('the sync server is not running; showing the local copy only.')
-    },
-  )
+async function serverOptions(major: number): Promise<TransportOptions> {
+  const config = await fetchConfig()
   if (config.yjs !== major)
     throw new Error(
       `The server runs Yjs v${config.yjs} and this page v${major}; start both with the same major.`,
@@ -41,7 +85,7 @@ interface SharedList {
 }
 
 /** Renders `list` into the page and appends what the form submits. */
-export function bindList(list: SharedList) {
+function bindList(list: SharedList) {
   const ul = document.querySelector<HTMLUListElement>('#items')!
   const input = document.querySelector<HTMLInputElement>('#item')!
   const render = () => {
@@ -70,18 +114,22 @@ const STORAGE_NAMES: Record<StorageBackend, string> = {
 }
 const TRANSPORT_NAMES = { webtransport: 'WebTransport', websocket: 'WebSocket' }
 
+function setStatus(major: number, storage: StorageBackend, transport: string) {
+  document.querySelector('#status')!.textContent =
+    `Yjs v${major} · storage: ${STORAGE_NAMES[storage]} · transport: ${transport}`
+}
+
 /** Keeps the status line current: Yjs major, storage backend, transport and its state. */
-export function showStatus(major: number, storage: StorageBackend, transport: Transport) {
-  const line = document.querySelector('#status')!
+function showStatus(major: number, storage: StorageBackend, transport: Transport) {
   const render = () => {
     const kind = transport.kind ? TRANSPORT_NAMES[transport.kind] : '–'
-    line.textContent = `Yjs v${major} · storage: ${STORAGE_NAMES[storage]} · transport: ${kind} (${transport.status})`
+    setStatus(major, storage, `${kind} (${transport.status})`)
   }
   transport.subscribe(render)
   render()
 }
 
-export function showError(error: unknown) {
+function showError(error: unknown) {
   document.querySelector('#status')!.textContent =
     `Error: ${error instanceof Error ? error.message : String(error)}`
   console.error(error)

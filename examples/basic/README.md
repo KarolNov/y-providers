@@ -14,7 +14,7 @@ pnpm build
 pnpm --filter y-providers-example-basic dev
 ```
 
-`dev` starts the sync server and Vite in one process and prints the page's URL (usually <http://localhost:5173>). Open it in two tabs, and in a second browser: an item added in one shows up in the others. Reload with the server stopped and the list is still there, read from the device.
+`dev` starts the sync server and Vite in one process and prints the page's URL (usually <http://localhost:5173>). Open it in two tabs, and in a second browser: an item added in one shows up in the others. Reload with the server stopped and the list is still there, read from the device; the page keeps asking for the server and connects once it is back.
 
 What it showed when tried on macOS:
 
@@ -27,9 +27,10 @@ What it showed when tried on macOS:
 
 ## What runs
 
-- [`server.ts`](server.ts): one `SyncServer` behind two adapters, `ws` on TCP port 1234 and WebTransport on UDP port 4433, both on 127.0.0.1. It makes a self-signed certificate at startup (WebTransport needs TLS) and serves the endpoints and the certificate's SHA-256 at `GET http://127.0.0.1:1234/config`; the page pins that hash. The server keeps documents in memory only: each browser has its own copy, and a restarted server gets the document back from the first client that reconnects. A restarted server has a new certificate, so reload open pages to go back to WebTransport. `pnpm --filter y-providers-example-basic server` runs the server alone.
-- [`src/main.ts`](src/main.ts): opens the storage, restores the document with `OpfsPersistence`, then connects a `SyncProvider`.
-- [`src/ui.ts`](src/ui.ts): the list, the status line and the `/config` fetch, with no Yjs in it.
+- [`server.ts`](server.ts): one `SyncServer` behind two adapters, `ws` on TCP port 1234 and WebTransport on UDP port 4433, both on 127.0.0.1. It makes a self-signed certificate at startup (WebTransport needs TLS) and serves the endpoints and the certificate's SHA-256 at `GET http://127.0.0.1:1234/config`; the page pins that hash. The server keeps documents in memory only: each browser has its own copy, and a restarted server gets the document back from the first client that reconnects. A restarted server has a new certificate, so reload open pages to go back to WebTransport. It answers only pages served from this machine (`localhost`, `127.0.0.1`), so another site open in the browser cannot reach the documents. `pnpm --filter y-providers-example-basic server` runs the server alone.
+- [`endpoints.ts`](endpoints.ts): the host and ports, shared by the server and the page.
+- [`src/main.ts`](src/main.ts): the Yjs v13 calls the page needs: `OpfsPersistence`, the list, and a `SyncProvider`.
+- [`src/ui.ts`](src/ui.ts): `start`, which opens the storage, restores the document, shows the list, then waits for `/config` and connects; plus the list and the status line. No Yjs in it.
 
 ## Yjs v14
 
@@ -37,7 +38,7 @@ What it showed when tried on macOS:
 pnpm --filter y-providers-example-basic dev:y14
 ```
 
-This runs the server on `y-transport/server/y14` and serves [`src/main.y14.ts`](src/main.y14.ts) instead of `src/main.ts`. The two differ only in their imports and in how they get the list:
+This runs the server on `y-transport/server/y14` and serves [`src/main.y14.ts`](src/main.y14.ts) instead of `src/main.ts`. The two differ only in their imports, the major they name and how they get the list:
 
 ```diff
 -import * as Y from 'yjs'
@@ -47,8 +48,11 @@ This runs the server on `y-transport/server/y14` and serves [`src/main.y14.ts`](
 +import { OpfsPersistence, openStorage } from 'y-opfs/y14'
 +import { SyncProvider, openTransport } from 'y-transport/y14'
 
--bindList(doc.getArray<string>('items'))
-+bindList(doc.get('items'))
+-  major: 13,
++  major: 14,
+...
+-  list: () => doc.getArray<string>('items'),
++  list: () => doc.get('items'),
 ```
 
 A v13 page cannot sync through a v14 server, or the other way round; the page reports a mismatch.

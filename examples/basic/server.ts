@@ -3,17 +3,14 @@
 // `node server.ts --y14` serves Yjs v14 clients.
 import { execFileSync } from 'node:child_process'
 import { createHash, X509Certificate } from 'node:crypto'
-import { mkdtempSync, readFileSync } from 'node:fs'
+import { mkdtempSync, readFileSync, rmSync } from 'node:fs'
 import { createServer } from 'node:http'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { WebSocketServer } from 'ws'
 import { attachWebSocketServer } from 'y-transport/server/ws'
 import { serveWebTransport } from 'y-transport/server/webtransport'
-
-const HOST = '127.0.0.1'
-const WS_PORT = 1234
-const WT_PORT = 4433
+import { HOST, WS_PORT, WT_PORT } from './endpoints.ts'
 
 export const y14 = process.argv.includes('--y14')
 
@@ -34,33 +31,44 @@ const server = new SyncServer()
  */
 function selfSignedCertificate() {
   const dir = mkdtempSync(join(tmpdir(), 'y-providers-example-'))
-  execFileSync(
-    'openssl',
-    [
-      'req',
-      '-x509',
-      '-newkey',
-      'ec',
-      '-pkeyopt',
-      'ec_paramgen_curve:prime256v1',
-      '-nodes',
-      '-keyout',
-      join(dir, 'key.pem'),
-      '-out',
-      join(dir, 'cert.pem'),
-      '-days',
-      '13',
-      '-subj',
-      `/CN=${HOST}`,
-      '-addext',
-      `subjectAltName=IP:${HOST}`,
-    ],
-    { stdio: 'ignore' },
-  )
-  const cert = readFileSync(join(dir, 'cert.pem'), 'utf8')
-  const privKey = readFileSync(join(dir, 'key.pem'), 'utf8')
-  const hash = createHash('sha256').update(new X509Certificate(cert).raw).digest()
-  return { cert, privKey, hash }
+  try {
+    execFileSync(
+      'openssl',
+      [
+        'req',
+        '-x509',
+        '-newkey',
+        'ec',
+        '-pkeyopt',
+        'ec_paramgen_curve:prime256v1',
+        '-nodes',
+        '-keyout',
+        join(dir, 'key.pem'),
+        '-out',
+        join(dir, 'cert.pem'),
+        '-days',
+        '13',
+        '-subj',
+        `/CN=${HOST}`,
+        '-addext',
+        `subjectAltName=IP:${HOST}`,
+      ],
+      { stdio: ['ignore', 'ignore', 'pipe'] },
+    )
+    const cert = readFileSync(join(dir, 'cert.pem'), 'utf8')
+    const privKey = readFileSync(join(dir, 'key.pem'), 'utf8')
+    const hash = createHash('sha256').update(new X509Certificate(cert).raw).digest()
+    return { cert, privKey, hash }
+  } catch (error) {
+    const stderr = (error as { stderr?: Buffer }).stderr?.toString().trim()
+    throw new Error(
+      `Could not make the self-signed certificate; this needs OpenSSL 1.1.1 or later as \`openssl\` on the path.${stderr ? `\nopenssl said: ${stderr}` : ''}`,
+      { cause: error },
+    )
+  } finally {
+    // The key is in memory now; do not leave it in the temp directory.
+    rmSync(dir, { recursive: true, force: true })
+  }
 }
 const { cert, privKey, hash } = selfSignedCertificate()
 
@@ -71,8 +79,22 @@ const config = {
   webTransportUrl: `https://${HOST}:${WT_PORT}/sync`,
   certHash: [...hash],
 }
+/**
+ * Only pages served from this machine (the Vite dev server) may use the server.
+ * Any other site could otherwise read and write the documents: WebSocket has no
+ * CORS, and /config would hand it the certificate hash WebTransport needs.
+ */
+function localOrigin(origin: string | undefined) {
+  if (!origin) return false
+  try {
+    return ['localhost', '127.0.0.1', '[::1]'].includes(new URL(origin).hostname)
+  } catch {
+    return false
+  }
+}
 const http = createServer((req, res) => {
-  res.setHeader('access-control-allow-origin', '*')
+  if (localOrigin(req.headers.origin))
+    res.setHeader('access-control-allow-origin', req.headers.origin!)
   if (req.url === '/config') {
     res.setHeader('content-type', 'application/json')
     res.end(JSON.stringify(config))
@@ -81,7 +103,13 @@ const http = createServer((req, res) => {
     res.end()
   }
 })
-attachWebSocketServer(server, new WebSocketServer({ server: http }))
+attachWebSocketServer(
+  server,
+  new WebSocketServer({
+    server: http,
+    verifyClient: (info: { origin: string }) => localOrigin(info.origin),
+  }),
+)
 await new Promise<void>((resolve) => http.listen(WS_PORT, HOST, resolve))
 await serveWebTransport(server, { port: WT_PORT, host: HOST, cert, privKey })
 
