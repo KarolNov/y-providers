@@ -2,14 +2,29 @@
   "name": "y-append-log",
   "version": "0.1.0",
   "description": "An append-only, crash-safe log of Yjs updates and the per-document storage contract, for Yjs v13 and v14.",
+  "keywords": [
+    "append-log",
+    "compaction",
+    "crdt",
+    "persistence",
+    "storage",
+    "yjs",
+    "yjs-v14"
+  ],
+  "homepage": "https://github.com/KarolNov/y-providers/tree/main/packages/y-append-log#readme",
+  "bugs": {
+    "url": "https://github.com/KarolNov/y-providers/issues"
+  },
   "license": "MIT",
+  "author": "Karol Novljaković",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/KarolNov/y-providers.git",
     "directory": "packages/y-append-log"
   },
   "files": [
-    "dist"
+    "dist",
+    "CHANGELOG.md"
   ],
   "type": "module",
   "sideEffects": false,
@@ -52,5 +67,8 @@
     "yjs": {
       "optional": true
     }
+  },
+  "engines": {
+    "node": ">=22"
   }
 }

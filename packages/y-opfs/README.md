@@ -1,8 +1,17 @@
 # y-opfs
 
-Part of [y-providers](../../README.md). [Yjs](https://yjs.dev) persistence (v0.1): append-only update log on the Origin Private File System, written from a Worker via sync access handles. Crash-safe compaction, IndexedDB fallback, Node/Bun filesystem adapter.
+Part of [y-providers](https://github.com/KarolNov/y-providers). [Yjs](https://yjs.dev) persistence (v0.1): append-only update log on the Origin Private File System, written from a Worker via sync access handles. Crash-safe compaction, IndexedDB fallback, Node/Bun filesystem adapter.
 
 > **Status: experimental.** The OPFS backend is built to explore newer browser storage APIs (sync access handles, Web Locks) and a crash-safe log format. It is not a drop-in replacement for [`y-indexeddb`](https://github.com/yjs/y-indexeddb), and for many apps `y-indexeddb`, or this package's IndexedDB mode, is probably the better choice. See [Which backend should I use?](#which-backend-should-i-use).
+
+## Install
+
+```sh
+npm install y-opfs yjs              # Yjs v13
+npm install y-opfs @y/y             # Yjs v14 (release candidate)
+```
+
+`y-append-log` comes with it as a dependency.
 
 ## Yjs v13 and v14
 

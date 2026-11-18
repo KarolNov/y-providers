@@ -1,6 +1,13 @@
 # y-append-log
 
-Part of [y-providers](../../README.md). The per-document storage contract for Yjs updates, an append-only byte-file log with crash-safe compaction, an in-memory store, and a conformance helper for backend authors. [`y-opfs`](../y-opfs) and [`y-transport`](../y-transport) build on it.
+Part of [y-providers](https://github.com/KarolNov/y-providers). The per-document storage contract for Yjs updates, an append-only byte-file log with crash-safe compaction, an in-memory store, and a conformance helper for backend authors. [`y-opfs`](https://github.com/KarolNov/y-providers/tree/main/packages/y-opfs) and [`y-transport`](https://github.com/KarolNov/y-providers/tree/main/packages/y-transport) build on it.
+
+## Install
+
+```sh
+npm install y-append-log yjs        # Yjs v13
+npm install y-append-log @y/y       # Yjs v14 (release candidate)
+```
 
 ## Yjs v13 and v14
 
@@ -63,7 +70,7 @@ It keeps each document merged, so `load` resolves a one-element array. Stores bu
 
 ## Byte-file adapter
 
-`ByteFileStore` implements `DocumentStore` over a byte-file `Storage` (`read`, `size`, `append`, `write`, `remove`, optional `appendIfSize` and `close`), the shape of OPFS, Node fs, IndexedDB and memory. `appendIfSize` appends only when the file is still the length the writer left it, in one operation; without it each append costs a separate `size()` first. This package ships `MemoryStorage`; [`y-opfs`](../y-opfs) ships the OPFS, IndexedDB and Node fs ones.
+`ByteFileStore` implements `DocumentStore` over a byte-file `Storage` (`read`, `size`, `append`, `write`, `remove`, optional `appendIfSize` and `close`), the shape of OPFS, Node fs, IndexedDB and memory. `appendIfSize` appends only when the file is still the length the writer left it, in one operation; without it each append costs a separate `size()` first. This package ships `MemoryStorage`; [`y-opfs`](https://github.com/KarolNov/y-providers/tree/main/packages/y-opfs) ships the OPFS, IndexedDB and Node fs ones.
 
 ```ts
 import { ByteFileStore, MemoryStorage } from 'y-append-log'
@@ -151,4 +158,4 @@ The cases check concurrent appends, read-your-writes across independent handles,
 
 ## Versioning
 
-Package semver plus [CHANGELOG.md](CHANGELOG.md). Nothing else.
+Package semver plus [CHANGELOG.md](https://github.com/KarolNov/y-providers/blob/main/packages/y-append-log/CHANGELOG.md). Nothing else.

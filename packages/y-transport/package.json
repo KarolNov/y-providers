@@ -2,14 +2,31 @@
   "name": "y-transport",
   "version": "0.1.0",
   "description": "Yjs sync for v13 and v14 over WebTransport with a WebSocket fallback, many documents per connection, plus a Node server for both.",
+  "keywords": [
+    "awareness",
+    "crdt",
+    "local-first",
+    "provider",
+    "sync",
+    "websocket",
+    "webtransport",
+    "yjs",
+    "yjs-v14"
+  ],
+  "homepage": "https://github.com/KarolNov/y-providers/tree/main/packages/y-transport#readme",
+  "bugs": {
+    "url": "https://github.com/KarolNov/y-providers/issues"
+  },
   "license": "MIT",
+  "author": "Karol Novljaković",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/KarolNov/y-providers.git",
     "directory": "packages/y-transport"
   },
   "files": [
-    "dist"
+    "dist",
+    "CHANGELOG.md"
   ],
   "type": "module",
   "sideEffects": false,
@@ -99,5 +116,8 @@
     "yjs": {
       "optional": true
     }
+  },
+  "engines": {
+    "node": ">=22"
   }
 }
