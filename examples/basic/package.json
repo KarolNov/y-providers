@@ -1,0 +1,35 @@
+{
+  "name": "y-providers-example-basic",
+  "version": "0.0.0",
+  "private": true,
+  "description": "A shared list persisted with y-opfs and synced with y-transport to a Node server.",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "node dev.ts",
+    "dev:y14": "node dev.ts --y14",
+    "server": "node server.ts",
+    "build": "vite build --outDir dist/v13 && vite build --mode y14 --outDir dist/v14",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@fails-components/webtransport": "^1.6.8",
+    "@fails-components/webtransport-transport-http3-quiche": "^1.6.8",
+    "@y/protocols": "1.0.6-rc.1",
+    "@y/y": "14.0.0-rc.30",
+    "ws": "^8.22.0",
+    "y-opfs": "workspace:*",
+    "y-protocols": "^1.0.6",
+    "y-transport": "workspace:*",
+    "yjs": "^13.6.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/ws": "^8.5.0",
+    "typescript": "^5.6.0",
+    "vite": "^8.3.2"
+  },
+  "engines": {
+    "node": ">=22.18"
+  }
+}
