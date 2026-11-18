@@ -20,41 +20,68 @@
       "anchors": [
         "packages/*/src/index.ts",
         "packages/*/src/y14.ts",
-        "packages/*/src/**/adapter*.ts",
-        "packages/*/package.json"
+        "packages/*/src/core.ts",
+        "packages/*/src/shared.ts",
+        "packages/*/src/adapter*.ts",
+        "packages/*/src/core/yjs.ts",
+        "packages/y-transport/src/server/index.ts",
+        "packages/y-transport/src/server/y14.ts",
+        "packages/*/package.json",
+        "scripts/check-entries.mjs"
       ]
     },
     "append-log": {
       "ref": null,
-      "anchors": ["packages/y-append-log/src", "!**/__tests__/**"]
+      "anchors": [
+        "packages/y-append-log/src/core",
+        "!packages/y-append-log/src/core/yjs.ts"
+      ]
     },
     "opfs/persistence": {
       "ref": null,
-      "anchors": ["packages/y-opfs/src", "!packages/y-opfs/src/persistence.ts", "!**/__tests__/**"]
+      "anchors": [
+        "packages/y-opfs/src/core",
+        "packages/y-opfs/src/node.ts",
+        "packages/y-opfs/src/worker.ts",
+        "!packages/y-opfs/src/core/persistence.ts",
+        "!packages/y-opfs/src/core/yjs.ts"
+      ]
     },
     "opfs/cross-tab": {
       "ref": null,
-      "anchors": ["packages/y-opfs/src/persistence.ts"]
+      "anchors": [
+        "packages/y-opfs/src/core/persistence.ts"
+      ]
     },
     "transport/connection": {
       "ref": null,
       "anchors": [
-        "packages/y-transport/src/transport.ts",
-        "packages/y-transport/src/link.ts",
-        "packages/y-transport/src/protocol.ts"
+        "packages/y-transport/src/core/transport.ts",
+        "packages/y-transport/src/core/link.ts",
+        "packages/y-transport/src/core/protocol.ts"
       ]
     },
     "transport/sync": {
       "ref": null,
-      "anchors": ["packages/y-transport/src/sync.ts", "packages/y-transport/src/provider.ts"]
+      "anchors": [
+        "packages/y-transport/src/core/sync.ts",
+        "packages/y-transport/src/core/provider.ts"
+      ]
     },
     "transport/awareness": {
       "ref": null,
-      "anchors": ["packages/y-transport/src/provider.ts", "packages/y-transport/src/transport.ts"]
+      "anchors": [
+        "packages/y-transport/src/core/provider.ts",
+        "packages/y-transport/src/core/transport.ts"
+      ]
     },
     "transport/server": {
       "ref": null,
-      "anchors": ["packages/y-transport/src/server", "!**/__tests__/**"]
+      "anchors": [
+        "packages/y-transport/src/core/server",
+        "packages/y-transport/src/server/ws.ts",
+        "packages/y-transport/src/server/webtransport.ts"
+      ]
     }
   },
   "changes": {
