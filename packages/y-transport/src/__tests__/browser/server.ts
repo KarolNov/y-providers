@@ -47,22 +47,28 @@ export default async function setup(project: TestProject) {
   }
 }
 
-/** Closes every connection on the server side, as a crash or a deploy would. */
-export const dropConnections: BrowserCommand<[]> = ({ project }) => {
+/**
+ * Closes, on the server side, every connection that has `doc` open, as a crash
+ * or a deploy would. Scoped to one document because the browser instances of a
+ * project can share this server and run the same test at once: dropping every
+ * connection would also cut another browser's test mid-run.
+ */
+export const dropConnections: BrowserCommand<[doc: string]> = ({ project }, doc) => {
   // Global setup may run once for the whole project or once per browser instance.
   const s = servers.get(project.name) ?? servers.get(project.name.replace(/ \([^)]*\)$/, ''))
   if (!s)
     throw new Error(
       `no transport test server for project ${project.name}; have ${[...servers.keys()].join(', ')}`,
     )
-  const links = (s.server as unknown as { links: Set<{ close(): void }> }).links
-  const count = links.size
+  const rooms = (s.server as unknown as { rooms: Map<string, { links: Set<{ close(): void }> }> })
+    .rooms
+  const links = [...(rooms.get(doc)?.links ?? [])]
   for (const link of links) link.close()
-  return count
+  return links.length
 }
 
 declare module 'vitest/browser' {
   interface BrowserCommands {
-    dropConnections(): Promise<number>
+    dropConnections(doc: string): Promise<number>
   }
 }

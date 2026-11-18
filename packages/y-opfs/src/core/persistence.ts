@@ -161,7 +161,7 @@ export class OpfsPersistence<D extends PersistenceDoc = PersistenceDoc> {
           ? (n: string) => new BroadcastChannel(n) as BroadcastChannelLike
           : null
     if (!make) return
-    this.channel = make(`y-modern:${this.storage.scope ?? ''}:${this.name}`)
+    this.channel = make(`y-opfs:${this.storage.scope ?? ''}:${this.name}`)
     this.channel.unref?.()
     this.channel.onmessage = this.handleMessage
   }

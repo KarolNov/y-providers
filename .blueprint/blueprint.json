@@ -62,14 +62,14 @@
       "specVersion": "1d528c346b5ade50",
       "anchorsFiles": {
         "packages/y-append-log/src/core/byte-file-storage.ts": "89293ac09245",
-        "packages/y-append-log/src/core/byte-file.ts": "6f89fc247492",
+        "packages/y-append-log/src/core/byte-file.ts": "8d2694df3a93",
         "packages/y-append-log/src/core/conformance.ts": "3e472b903ea8",
         "packages/y-append-log/src/core/log.ts": "bc4eb08fb55c",
         "packages/y-append-log/src/core/memory.ts": "b99f3bed8db6",
         "packages/y-append-log/src/core/types.ts": "98333bdba88b",
         "packages/y-append-log/src/core/update.ts": "38844bdc09d0"
       },
-      "syncedCommit": "098c6a1d21be8b2fa9bfe1b1aacc2ec2f13f3306"
+      "syncedCommit": "793b6ddbd52eeed1a70936d6dc69c863308d18e4"
     },
     "opfs/persistence": {
       "ref": "https://app.notion.com/p/41c43cce21f2818ab0a4f381fe6145e7",
@@ -84,21 +84,21 @@
       "anchorsFiles": {
         "packages/y-opfs/src/core/idb.ts": "99cdf77b0d9d",
         "packages/y-opfs/src/core/opfs.ts": "d30b4f8180d2",
-        "packages/y-opfs/src/core/storage.ts": "a55649aaaaec",
+        "packages/y-opfs/src/core/storage.ts": "1d4e48142ec9",
         "packages/y-opfs/src/core/worker-client.ts": "2b0235686f64",
         "packages/y-opfs/src/node.ts": "b0346d77fd4c",
         "packages/y-opfs/src/worker.ts": "aebe011cf316"
       },
-      "syncedCommit": "098c6a1d21be8b2fa9bfe1b1aacc2ec2f13f3306"
+      "syncedCommit": "793b6ddbd52eeed1a70936d6dc69c863308d18e4"
     },
     "opfs/cross-tab": {
       "ref": "https://app.notion.com/p/41c43cce21f281089fd9e3ff95be7eca",
       "anchors": ["packages/y-opfs/src/core/persistence.ts"],
       "specVersion": "0e6f3b27b5ee1e48",
       "anchorsFiles": {
-        "packages/y-opfs/src/core/persistence.ts": "8199668780aa"
+        "packages/y-opfs/src/core/persistence.ts": "59f754477248"
       },
-      "syncedCommit": "098c6a1d21be8b2fa9bfe1b1aacc2ec2f13f3306"
+      "syncedCommit": "793b6ddbd52eeed1a70936d6dc69c863308d18e4"
     },
     "transport/connection": {
       "ref": "https://app.notion.com/p/41c43cce21f28197a6f6ee5a611e5921",
@@ -110,10 +110,10 @@
       "specVersion": "7e880754b96b483d",
       "anchorsFiles": {
         "packages/y-transport/src/core/link.ts": "2ca3e2c215a4",
-        "packages/y-transport/src/core/protocol.ts": "d82823c2ba7c",
+        "packages/y-transport/src/core/protocol.ts": "3c521ca1b6e3",
         "packages/y-transport/src/core/transport.ts": "65b40b031504"
       },
-      "syncedCommit": "098c6a1d21be8b2fa9bfe1b1aacc2ec2f13f3306"
+      "syncedCommit": "793b6ddbd52eeed1a70936d6dc69c863308d18e4"
     },
     "transport/sync": {
       "ref": "https://app.notion.com/p/41c43cce21f2817db706cda104c1852d",
