@@ -16,7 +16,7 @@
   "project": "https://app.notion.com/p/41143cce21f28027bc46de18a8c321de",
   "specs": {
     "compat/yjs": {
-      "ref": null,
+      "ref": "https://app.notion.com/p/41c43cce21f281a788bfeb1e7e8033f6",
       "anchors": [
         "packages/*/src/index.ts",
         "packages/*/src/y14.ts",
@@ -28,60 +28,140 @@
         "packages/y-transport/src/server/y14.ts",
         "packages/*/package.json",
         "scripts/check-entries.mjs"
-      ]
+      ],
+      "specVersion": "52a76b746c800e17",
+      "anchorsFiles": {
+        "packages/y-append-log/package.json": "22bca038f1ec",
+        "packages/y-append-log/src/adapter13.ts": "662b5ee1f762",
+        "packages/y-append-log/src/adapter14.ts": "78b360475f35",
+        "packages/y-append-log/src/core.ts": "f850154415a8",
+        "packages/y-append-log/src/core/yjs.ts": "964ee82e4223",
+        "packages/y-append-log/src/index.ts": "8d8f1fc5fa77",
+        "packages/y-append-log/src/y14.ts": "771db19148da",
+        "packages/y-opfs/package.json": "a2422cd51da4",
+        "packages/y-opfs/src/core/yjs.ts": "bda723fd6c9b",
+        "packages/y-opfs/src/index.ts": "71f65b6836c8",
+        "packages/y-opfs/src/shared.ts": "99a71a6fa09f",
+        "packages/y-opfs/src/y14.ts": "19915d4caf20",
+        "packages/y-transport/package.json": "5c350d802f48",
+        "packages/y-transport/src/adapter13.ts": "c2e9cefd0174",
+        "packages/y-transport/src/adapter14.ts": "18ced1a9ab18",
+        "packages/y-transport/src/core/yjs.ts": "ef95adbecda1",
+        "packages/y-transport/src/index.ts": "8a5001c2f5ff",
+        "packages/y-transport/src/server/index.ts": "e8d40a1f9283",
+        "packages/y-transport/src/server/y14.ts": "920835086d4b",
+        "packages/y-transport/src/shared.ts": "502ec2501688",
+        "packages/y-transport/src/y14.ts": "d71a398f399a",
+        "scripts/check-entries.mjs": "e83c6997a31d"
+      },
+      "syncedCommit": "098c6a1d21be8b2fa9bfe1b1aacc2ec2f13f3306"
     },
     "append-log": {
-      "ref": null,
+      "ref": "https://app.notion.com/p/41c43cce21f281e583ddd6e746462b24",
       "anchors": [
         "packages/y-append-log/src/core",
         "!packages/y-append-log/src/core/yjs.ts"
-      ]
+      ],
+      "specVersion": "1d528c346b5ade50",
+      "anchorsFiles": {
+        "packages/y-append-log/src/core/byte-file-storage.ts": "89293ac09245",
+        "packages/y-append-log/src/core/byte-file.ts": "6f89fc247492",
+        "packages/y-append-log/src/core/conformance.ts": "3e472b903ea8",
+        "packages/y-append-log/src/core/log.ts": "bc4eb08fb55c",
+        "packages/y-append-log/src/core/memory.ts": "b99f3bed8db6",
+        "packages/y-append-log/src/core/types.ts": "98333bdba88b",
+        "packages/y-append-log/src/core/update.ts": "38844bdc09d0"
+      },
+      "syncedCommit": "098c6a1d21be8b2fa9bfe1b1aacc2ec2f13f3306"
     },
     "opfs/persistence": {
-      "ref": null,
+      "ref": "https://app.notion.com/p/41c43cce21f2818ab0a4f381fe6145e7",
       "anchors": [
         "packages/y-opfs/src/core",
         "packages/y-opfs/src/node.ts",
         "packages/y-opfs/src/worker.ts",
         "!packages/y-opfs/src/core/persistence.ts",
         "!packages/y-opfs/src/core/yjs.ts"
-      ]
+      ],
+      "specVersion": "36b873d4e00fbdd7",
+      "anchorsFiles": {
+        "packages/y-opfs/src/core/idb.ts": "99cdf77b0d9d",
+        "packages/y-opfs/src/core/opfs.ts": "d30b4f8180d2",
+        "packages/y-opfs/src/core/storage.ts": "a55649aaaaec",
+        "packages/y-opfs/src/core/worker-client.ts": "2b0235686f64",
+        "packages/y-opfs/src/node.ts": "b0346d77fd4c",
+        "packages/y-opfs/src/worker.ts": "aebe011cf316"
+      },
+      "syncedCommit": "098c6a1d21be8b2fa9bfe1b1aacc2ec2f13f3306"
     },
     "opfs/cross-tab": {
-      "ref": null,
+      "ref": "https://app.notion.com/p/41c43cce21f281089fd9e3ff95be7eca",
       "anchors": [
         "packages/y-opfs/src/core/persistence.ts"
-      ]
+      ],
+      "specVersion": "0e6f3b27b5ee1e48",
+      "anchorsFiles": {
+        "packages/y-opfs/src/core/persistence.ts": "8199668780aa"
+      },
+      "syncedCommit": "098c6a1d21be8b2fa9bfe1b1aacc2ec2f13f3306"
     },
     "transport/connection": {
-      "ref": null,
+      "ref": "https://app.notion.com/p/41c43cce21f28197a6f6ee5a611e5921",
       "anchors": [
         "packages/y-transport/src/core/transport.ts",
         "packages/y-transport/src/core/link.ts",
         "packages/y-transport/src/core/protocol.ts"
-      ]
+      ],
+      "specVersion": "7e880754b96b483d",
+      "anchorsFiles": {
+        "packages/y-transport/src/core/link.ts": "2ca3e2c215a4",
+        "packages/y-transport/src/core/protocol.ts": "d82823c2ba7c",
+        "packages/y-transport/src/core/transport.ts": "65b40b031504"
+      },
+      "syncedCommit": "098c6a1d21be8b2fa9bfe1b1aacc2ec2f13f3306"
     },
     "transport/sync": {
-      "ref": null,
+      "ref": "https://app.notion.com/p/41c43cce21f2817db706cda104c1852d",
       "anchors": [
         "packages/y-transport/src/core/sync.ts",
         "packages/y-transport/src/core/provider.ts"
-      ]
+      ],
+      "specVersion": "198aabf7ae6b41ff",
+      "anchorsFiles": {
+        "packages/y-transport/src/core/provider.ts": "72f96b9071ef",
+        "packages/y-transport/src/core/sync.ts": "2d39820fc532"
+      },
+      "syncedCommit": "098c6a1d21be8b2fa9bfe1b1aacc2ec2f13f3306"
     },
     "transport/awareness": {
-      "ref": null,
+      "ref": "https://app.notion.com/p/41c43cce21f28180afeadc485f9ab86a",
       "anchors": [
         "packages/y-transport/src/core/provider.ts",
         "packages/y-transport/src/core/transport.ts"
-      ]
+      ],
+      "specVersion": "60aac04a75da41fc",
+      "anchorsFiles": {
+        "packages/y-transport/src/core/provider.ts": "72f96b9071ef",
+        "packages/y-transport/src/core/transport.ts": "65b40b031504"
+      },
+      "syncedCommit": "098c6a1d21be8b2fa9bfe1b1aacc2ec2f13f3306"
     },
     "transport/server": {
-      "ref": null,
+      "ref": "https://app.notion.com/p/41c43cce21f281399ccdd7dd94161e9a",
       "anchors": [
         "packages/y-transport/src/core/server",
         "packages/y-transport/src/server/ws.ts",
         "packages/y-transport/src/server/webtransport.ts"
-      ]
+      ],
+      "specVersion": "7c19eade31627e26",
+      "anchorsFiles": {
+        "packages/y-transport/src/core/server/index.ts": "2d0258ca373e",
+        "packages/y-transport/src/core/server/webtransport.ts": "9bb8307f88a4",
+        "packages/y-transport/src/core/server/ws.ts": "29f6284ce14b",
+        "packages/y-transport/src/server/webtransport.ts": "9db245c52457",
+        "packages/y-transport/src/server/ws.ts": "ab7ee9c82347"
+      },
+      "syncedCommit": "098c6a1d21be8b2fa9bfe1b1aacc2ec2f13f3306"
     }
   },
   "changes": {
