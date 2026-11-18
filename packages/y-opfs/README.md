@@ -58,7 +58,7 @@ Reasons to still consider this package:
 
 ### Durability and storage limits
 
-What happens to stored documents when storage runs out, when the browser evicts a site's data, and when the browser is killed. Measured 2026-10-04 with Playwright 1.63 on macOS (Apple M1): Chromium 153, Firefox 155 and WebKit 26.6. The WebKit build is Playwright's, not Safari. Measured in the y-modern repository, whose durability harness is not part of y-providers; the code measured is the code in this package, with Yjs v13.
+What happens to stored documents when storage runs out, when the browser evicts a site's data, and when the browser is killed. Measured 2026-10-04 with Playwright 1.63 on macOS (Apple M1): Chromium 153, Firefox 155 and WebKit 26.6. The WebKit build is Playwright's, not Safari. Measured in [y-modern](https://github.com/KarolNov/y-providers#where-this-came-from), my private Yjs playground, whose durability harness isn't part of y-providers; the code measured is the code in this package, with Yjs v13.
 
 **In an app:**
 
@@ -144,7 +144,7 @@ In Node the global `BroadcastChannel` connects workers and the main thread of on
 
 ## Benchmarks
 
-Earlier measurements, made in the y-modern repository where the benchmark harness lives (it is not part of y-providers). The code measured is the code in this package; only package names and the Yjs adapter changed since. They were taken with Yjs v13.
+Earlier measurements, made in [y-modern](https://github.com/KarolNov/y-providers#where-this-came-from), my private Yjs playground, where the benchmark harness lives (it isn't part of y-providers). The code measured is the code in this package; only package names and the Yjs adapter changed since. They were taken with Yjs v13.
 
 Compared against [`y-indexeddb`](https://github.com/yjs/y-indexeddb) in headless Chromium: `y-indexeddb`, `OpfsPersistence` over OPFS (via the worker), and `OpfsPersistence` over its IndexedDB fallback. Every backend receives the same deterministic updates, each timed run uses a fresh database, and timing stops only after the data is committed. Defaults are used everywhere; nothing is tuned.
 
