@@ -42,6 +42,14 @@ import { SyncServer } from 'y-transport/server/y14'
 - The `/y14` entries need Node 22 or later, like `@y/y`. They are tested against `@y/y` 14.0.0-rc.30, and CI also runs against the newest release candidate.
 - Mixing majors is **not supported** in 0.1.0: a v13 client and a v14 client cannot sync through one server. Run the server on the same major as its clients.
 
+## Example
+
+[`examples/basic`](examples/basic) is a shared list in the browser, stored with `y-opfs` and synced through a Node `SyncServer` with `y-transport`, on Yjs v13 or v14. After `pnpm install` and `pnpm build`:
+
+```sh
+pnpm --filter y-providers-example-basic dev
+```
+
 ## Development
 
 ```sh

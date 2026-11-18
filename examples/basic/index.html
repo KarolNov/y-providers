@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>y-providers example</title>
+    <style>
+      body {
+        font:
+          16px/1.5 system-ui,
+          sans-serif;
+        max-width: 32rem;
+        margin: 2rem auto;
+        padding: 0 1rem;
+      }
+      #status {
+        font-family: ui-monospace, monospace;
+        font-size: 14px;
+        color: #555;
+      }
+      form {
+        display: flex;
+        gap: 0.5rem;
+      }
+      input {
+        flex: 1;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Shared list</h1>
+    <p id="status">Starting…</p>
+    <form id="add">
+      <input id="item" placeholder="Add an item" autocomplete="off" />
+      <button>Add</button>
+    </form>
+    <ul id="items"></ul>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
