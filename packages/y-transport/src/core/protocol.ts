@@ -53,7 +53,7 @@ export const MIN_PROTOCOL_VERSION = 2
 
 /**
  * The first message on every connection, in both directions:
- * `0xff varString('y-modern') varUint(min) varUint(max)`. This layout is frozen
+ * `0xff varString('y-transport') varUint(min) varUint(max)`. This layout is frozen
  * so that any two versions can read each other's hello, whatever the frames
  * that follow look like.
  *
@@ -64,7 +64,7 @@ export const MIN_PROTOCOL_VERSION = 2
  * client then hears nothing and reports that as no handshake.
  */
 const HELLO_MARK = 0xff
-const HELLO_MAGIC = 'y-modern'
+const HELLO_MAGIC = 'y-transport'
 
 export interface VersionRange {
   min: number

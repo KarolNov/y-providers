@@ -20,7 +20,7 @@ The packages are real and tested, but treat them as a study first and a dependen
 
 The code started in y-modern, my private Yjs playground. It was meant to become a public open-source library, but it grew bigger than I could finish as one project, so it never shipped. I'm splitting the parts that work into smaller public projects instead: the local persistence and network sync are here, the Jotai atoms over a `Y.Doc` are in [duratom](https://github.com/KarolNov/duratom), and more may follow.
 
-A few traces of that name are left on purpose, because changing them would break stored data or the wire format: the `y-modern` magic string in the `y-transport` handshake, and the `y-modern:` prefix on the Web Lock and `BroadcastChannel` names. The benchmark and durability numbers in the package READMEs were also measured there, with Yjs v13, using a harness that isn't copied here.
+Nothing here stays compatible with y-modern: the handshake, lock and channel names are y-providers' own. The benchmark and durability numbers in the package READMEs were measured in y-modern, with Yjs v13, using a harness that isn't copied here.
 
 ## Yjs v13 and v14
 
