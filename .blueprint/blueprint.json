@@ -31,19 +31,19 @@
       ],
       "specVersion": "52a76b746c800e17",
       "anchorsFiles": {
-        "packages/y-append-log/package.json": "22bca038f1ec",
+        "packages/y-append-log/package.json": "ebf57e84848e",
         "packages/y-append-log/src/adapter13.ts": "662b5ee1f762",
         "packages/y-append-log/src/adapter14.ts": "78b360475f35",
         "packages/y-append-log/src/core.ts": "f850154415a8",
         "packages/y-append-log/src/core/yjs.ts": "964ee82e4223",
         "packages/y-append-log/src/index.ts": "8d8f1fc5fa77",
         "packages/y-append-log/src/y14.ts": "771db19148da",
-        "packages/y-opfs/package.json": "a2422cd51da4",
+        "packages/y-opfs/package.json": "244942b7d0bb",
         "packages/y-opfs/src/core/yjs.ts": "bda723fd6c9b",
         "packages/y-opfs/src/index.ts": "71f65b6836c8",
         "packages/y-opfs/src/shared.ts": "99a71a6fa09f",
         "packages/y-opfs/src/y14.ts": "19915d4caf20",
-        "packages/y-transport/package.json": "5c350d802f48",
+        "packages/y-transport/package.json": "ad22b1eb69ac",
         "packages/y-transport/src/adapter13.ts": "c2e9cefd0174",
         "packages/y-transport/src/adapter14.ts": "18ced1a9ab18",
         "packages/y-transport/src/core/yjs.ts": "ef95adbecda1",
@@ -54,7 +54,7 @@
         "packages/y-transport/src/y14.ts": "d71a398f399a",
         "scripts/check-entries.mjs": "e83c6997a31d"
       },
-      "syncedCommit": "098c6a1d21be8b2fa9bfe1b1aacc2ec2f13f3306"
+      "syncedCommit": "44b9ff4061d6ce93e185b352e4a91a6b58104297"
     },
     "append-log": {
       "ref": "https://app.notion.com/p/41c43cce21f281e583ddd6e746462b24",

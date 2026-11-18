@@ -2,14 +2,30 @@
   "name": "y-opfs",
   "version": "0.1.0",
   "description": "Yjs persistence for v13 and v14: an append-only OPFS log with IndexedDB fallback, live sync between tabs, and a Node filesystem adapter.",
+  "keywords": [
+    "crdt",
+    "indexeddb",
+    "local-first",
+    "offline",
+    "opfs",
+    "persistence",
+    "yjs",
+    "yjs-v14"
+  ],
+  "homepage": "https://github.com/KarolNov/y-providers/tree/main/packages/y-opfs#readme",
+  "bugs": {
+    "url": "https://github.com/KarolNov/y-providers/issues"
+  },
   "license": "MIT",
+  "author": "Karol Novljaković",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/KarolNov/y-providers.git",
     "directory": "packages/y-opfs"
   },
   "files": [
-    "dist"
+    "dist",
+    "CHANGELOG.md"
   ],
   "type": "module",
   "sideEffects": false,
@@ -64,5 +80,8 @@
     "yjs": {
       "optional": true
     }
+  },
+  "engines": {
+    "node": ">=22"
   }
 }

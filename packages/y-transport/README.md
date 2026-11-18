@@ -1,6 +1,6 @@
 # y-transport
 
-Part of [y-providers](../../README.md). Yjs sync over **WebTransport**, falling back to **WebSocket**, with a server for both (v0.1).
+Part of [y-providers](https://github.com/KarolNov/y-providers). Yjs sync over **WebTransport**, falling back to **WebSocket**, with a server for both (v0.1).
 
 > **Status: experimental.** Tested in Node and in headless Chromium, Firefox and WebKit (Vitest browser mode with Playwright) against real WebTransport (HTTP/3) and WebSocket servers on 127.0.0.1. In Chromium and Firefox, with their native `WebTransport` and `WebSocket`, the tests check that two clients sync a document and awareness over each protocol, that a self-signed certificate is accepted when its hash is pinned and rejected when another hash is, that awareness renewals travel as datagrams from client to server and from server to client, that `auto` picks WebTransport and falls back to WebSocket when the WebTransport endpoint is unreachable, and that clients reconnect and merge offline edits after the server drops them. In Node only (a UDP relay is needed): a client whose path goes silent is dropped by the liveness check and reconnects, and a WebTransport session survives a change of the client's source port. Playwright's WebKit has no `WebTransport`, so there only the WebSocket tests run, plus one checking that `auto` goes straight to WebSocket. Not tested: Safari itself, a real network with packet loss, NAT or blocked UDP (on 127.0.0.1 an unreachable endpoint fails at once instead of timing out), `wss://` (a browser cannot pin a hash for a WebSocket, so it needs a trusted certificate), and a deployment behind a proxy or CDN. Packet loss and latency were only emulated, in the [benchmarks](#benchmarks). Every test runs once per Yjs major. Not addressed in 0.1.0: rate and size limits, and servers that hibernate (see [Known limitations](#known-limitations-v01)).
 
@@ -11,6 +11,20 @@ What it does:
 - Reconnects with backoff and re-syncs both ways. Edits made while offline are not queued; Yjs state exchange merges them on reconnect.
 - Notices a dead connection itself: after `pingInterval` (default 15s) of silence the client sends a ping frame (type 3, empty document name) and the server answers with a pong (type 4); after `idleTimeout` (default three intervals) with nothing received, the client closes the link and reconnects. Any frame counts as proof of life, and the same check covers WebTransport and WebSocket. A browser cannot send WebSocket protocol-level pings, which is why this is an application frame. The server-side WebSocket heartbeat still exists for dead clients.
 - Connection migration comes from QUIC, not from this code: a WebTransport session survives the client's address changing (a NAT rebinding, Wi-Fi to cellular) because QUIC identifies connections by ID, not by address. A test routes a client through a UDP relay and moves it to a new source port mid-session; the session stays up with no reconnect and edits flow both ways. That checks the server side (`@fails-components/webtransport`) and the client in Node; whether a browser actually moves the connection when the OS changes network is up to the browser and is not tested. A WebSocket is TCP and cannot migrate: it drops and reconnects.
+
+## Install
+
+```sh
+npm install y-transport yjs y-protocols          # Yjs v13
+npm install y-transport @y/y @y/protocols        # Yjs v14 (release candidate)
+```
+
+The server adapters need their own packages, installed next to the server code only:
+
+```sh
+npm install ws                                   # y-transport/server/ws
+npm install @fails-components/webtransport @fails-components/webtransport-transport-http3-quiche   # y-transport/server/webtransport
+```
 
 ## Yjs v13 and v14
 
@@ -79,7 +93,7 @@ Adapters are separate entry points so you only install what you use. `ws` is nee
 
 Because the sync logic only sees a `Link` (a frame pipe), a Cloudflare Worker or Deno server can reuse `SyncServer` by wrapping its own sockets in a `Link`.
 
-**Storage.** `storage` takes any `DocumentStore` from [`y-append-log`](../y-append-log/README.md): `load`, `append`, `delete` and an optional `close`. The server calls `load` once when a document is first opened and applies the updates it resolves in one transaction, then calls `append` with every update it accepts, in order. Updates go both ways in the Yjs v2 encoding (`Y.encodeStateAsUpdateV2`, the doc's `updateV2` event). `close()` on the server closes the store. Compaction is the store's job. `MemoryDocumentStore` from `y-append-log` keeps documents in memory; `ByteFileStore` from `y-append-log` over `NodeFsStorage` from `y-opfs/node` keeps them on disk; or write your own against the contract. A document is freed `evictAfter` ms after its last connection leaves (or sends a leave frame for it); a connection that comes back first keeps it. With `storage` the default is 30s, and a freed document is loaded again on the next open. Without `storage` the default is never, because the server's memory is the only copy. Set `evictAfter` anyway to stop idle documents from piling up when the server is a relay rather than the record: a freed document is gone from the server, and it comes back only when a client that still holds it syncs again (the state exchange sends the server everything it lacks). A client that never had it gets an empty document.
+**Storage.** `storage` takes any `DocumentStore` from [`y-append-log`](https://github.com/KarolNov/y-providers/tree/main/packages/y-append-log#readme): `load`, `append`, `delete` and an optional `close`. The server calls `load` once when a document is first opened and applies the updates it resolves in one transaction, then calls `append` with every update it accepts, in order. Updates go both ways in the Yjs v2 encoding (`Y.encodeStateAsUpdateV2`, the doc's `updateV2` event). `close()` on the server closes the store. Compaction is the store's job. `MemoryDocumentStore` from `y-append-log` keeps documents in memory; `ByteFileStore` from `y-append-log` over `NodeFsStorage` from `y-opfs/node` keeps them on disk; or write your own against the contract. A document is freed `evictAfter` ms after its last connection leaves (or sends a leave frame for it); a connection that comes back first keeps it. With `storage` the default is 30s, and a freed document is loaded again on the next open. Without `storage` the default is never, because the server's memory is the only copy. Set `evictAfter` anyway to stop idle documents from piling up when the server is a relay rather than the record: a freed document is gone from the server, and it comes back only when a client that still holds it syncs again (the state exchange sends the server everything it lacks). A client that never had it gets an empty document.
 
 ```ts
 import { MemoryDocumentStore } from 'y-append-log'
@@ -116,9 +130,9 @@ What a run on a GitHub runner (2026-10-04, 2-core AMD EPYC) showed:
 ## Known limitations (v0.1)
 
 - No authentication beyond `authorize`, no rate limits, no per-document or per-message size limits, no `wss://` tests, and no server that can hibernate (Durable Objects). These are known gaps; treat 0.1.0 as experimental.
-- No offline queue beyond what Yjs state exchange gives you, and no persistence on the client; combine it with [`y-opfs`](../y-opfs/README.md) (the two do not depend on each other).
+- No offline queue beyond what Yjs state exchange gives you, and no persistence on the client; combine it with [`y-opfs`](https://github.com/KarolNov/y-providers/tree/main/packages/y-opfs#readme) (the two do not depend on each other).
 - Pings are part of every protocol version, so any server that passes the handshake answers them. A server of your own that wraps its sockets in a `Link` without `SyncServer` has to answer them too, or a quiet connection is closed and reopened every `idleTimeout`; `pingInterval: 0` turns the check off.
 
 ## Versioning
 
-Package semver plus [CHANGELOG.md](CHANGELOG.md).
+Package semver plus [CHANGELOG.md](https://github.com/KarolNov/y-providers/blob/main/packages/y-transport/CHANGELOG.md).
