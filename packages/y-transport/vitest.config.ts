@@ -22,7 +22,11 @@ const node = (major: Major) => ({
     name: `node-${major}`,
     environment: 'node' as const,
     include: ['src/**/__tests__/*.test.ts'],
-    exclude: ['src/**/__tests__/**/*.browser.test.ts'],
+    exclude: [
+      'src/**/__tests__/**/*.browser.test.ts',
+      // Imports both majors directly, so one project is enough.
+      ...(major === 'v14' ? ['src/**/__tests__/mixed-majors.test.ts'] : []),
+    ],
   },
 })
 
